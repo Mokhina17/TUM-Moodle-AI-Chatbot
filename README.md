@@ -8,3 +8,5 @@ The file (currently) contains:
 
 To make contributions we will each create individual branches for various assigned tasks and when complete with a task merge them.
 Code will need review before integration to ensure we do not run into serious merge conflicts or errors.
+
+To make contributions clone the repository, create a new branch, version changes, commit and push them to the prerequisite branch.
