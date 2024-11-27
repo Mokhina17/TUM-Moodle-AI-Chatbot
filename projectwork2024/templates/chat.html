@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TUM Moodle GPT</title>
+  <!-- Подключение CSS -->
+  <link rel="stylesheet" href="{% static 'css/styles' %}">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>Lernplatform Moodle<br>Technische Universität München</h2>
+      <button class="collapse-btn">⋮</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <header>
+        <h1>TUM Moodle GPT</h1>
+      </header>
+      <div class="info-cards">
+        <div class="card">
+          <h2>Examples</h2>
+          <ul>
+            <li>What are the exam requirements for the course? →</li>
+            <li>How many weekly hours do I need to commit for this module? →</li>
+            <li>What are the recommended books or resources for this course? →</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>Capabilities</h2>
+          <ul>
+            <li>Remembers what user said earlier in the conversation.</li>
+            <li>Understands and answers questions about courses, schedules, and Moodle-related topics.</li>
+            <li>Rejects irrelevant or inappropriate queries to maintain a productive discussion.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>Limitations</h2>
+          <ul>
+            <li>May occasionally generate incorrect information.</li>
+            <li>Cannot address issues or updates outside the Moodle platform or TUM-related systems.</li>
+          </ul>
+        </div>
+      </div>
+      <footer>
+        <form class="chat-form">
+          <input type="text" placeholder="Send a message..." />
+          <button type="submit">→</button>
+        </form>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
