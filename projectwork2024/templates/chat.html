@@ -5,54 +5,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TUM Moodle GPT</title>
+  <!-- Подключение шрифта Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <!-- Подключение CSS -->
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
   <div class="container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <h2>Lernplatform Moodle<br>Technische Universität München</h2>
-      <button class="collapse-btn">⋮</button>
+    <!-- Верхний блок с текстом и логотипом -->
+    <header class="header">
+      <div class="header-left">
+        <h2 class="platform-title">Lernplatform Moodle<br>Technische Universität München</h2>
+      </div>
+      <div class="header-right">
+        <img src="{% static 'images/tum_logo.svg' %}" alt="TUM Logo" class="tum-logo">
+      </div>
+    </header>
+
+    <!-- Заголовок -->
+    <div class="main-title">
+      <h1>TUM Moodle GPT</h1>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-      <header>
-        <h1>TUM Moodle GPT</h1>
-      </header>
-      <div class="info-cards">
+    <!-- Карточки -->
+    <div class="info-cards">
+      <!-- Левый столбец -->
+      <div class="column">
         <div class="card">
-          <h2>Examples</h2>
-          <ul>
-            <li>What are the exam requirements for the course? →</li>
-            <li>How many weekly hours do I need to commit for this module? →</li>
-            <li>What are the recommended books or resources for this course? →</li>
-          </ul>
+          <div class="card-title">Examples</div>
+          <div class="content-block">What are the exam requirements for the course? →</div>
         </div>
         <div class="card">
-          <h2>Capabilities</h2>
-          <ul>
-            <li>Remembers what user said earlier in the conversation.</li>
-            <li>Understands and answers questions about courses, schedules, and Moodle-related topics.</li>
-            <li>Rejects irrelevant or inappropriate queries to maintain a productive discussion.</li>
-          </ul>
+          <div class="content-block">How many weekly hours do I need to commit for this module? →</div>
         </div>
         <div class="card">
-          <h2>Limitations</h2>
-          <ul>
-            <li>May occasionally generate incorrect information.</li>
-            <li>Cannot address issues or updates outside the Moodle platform or TUM-related systems.</li>
-          </ul>
+          <div class="content-block">What are the recommended books or resources for this course? →</div>
         </div>
       </div>
-      <footer>
-        <form class="chat-form">
-          <input type="text" placeholder="Send a message..." />
-          <button type="submit">→</button>
-        </form>
-      </footer>
+      <!-- Средний столбец -->
+      <div class="column">
+        <div class="card">
+          <div class="card-title">Capabilities</div>
+          <div class="content-block">Remembers what user said earlier in the conversation.</div>
+        </div>
+        <div class="card">
+          <div class="content-block">Understands and answers questions about courses, schedules, and Moodle-related topics.</div>
+        </div>
+        <div class="card">
+          <div class="content-block">Rejects irrelevant or inappropriate queries to maintain a productive discussion.</div>
+        </div>
+      </div>
+      <!-- Правый столбец -->
+      <div class="column">
+        <div class="card">
+          <div class="card-title">Limitations</div>
+          <div class="content-block">May occasionally generate incorrect information.</div>
+        </div>
+        <div class="card">
+          <div class="content-block">Cannot address issues or updates outside the Moodle platform or TUM-related systems.</div>
+        </div>
+      </div>
     </div>
+
+    <!-- Чат -->
+    <footer class="footer">
+      <form class="chat-form">
+        <input type="text" class="chat-input" placeholder="Send a message..." />
+        <button type="submit" class="chat-submit">
+          <img src="{% static 'images/2582606.png' %}" alt="Send" class="send-icon">
+        </button>
+      </form>
+    </footer>
   </div>
 </body>
 </html>
