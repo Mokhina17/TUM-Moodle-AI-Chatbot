@@ -16,10 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from projectwork2024.views import chat_interface  # Import your view
+from projectwork2024 import views  # Импортируем views из приложения
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('chat/', chat_interface, name='chat'),  # Existing route for chat
-    path('', chat_interface, name='home'),  # New route for the root URL
+    path('chat/', views.chat_interface, name='chat'),  # Маршрут для чата
+    path('', views.chat_interface, name='home'),  # Главная страница (может использоваться тот же view, что и для чата)
 ]

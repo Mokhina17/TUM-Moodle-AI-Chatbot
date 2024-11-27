@@ -1,4 +1,4 @@
-/* Общие стили */
+/* Основные стили */
 body {
   margin: 0;
   padding: 0;
@@ -22,8 +22,6 @@ header {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding: 0 20px;
-  box-sizing: border-box;
 }
 
 .header-left .platform-title {
@@ -31,7 +29,6 @@ header {
   font-weight: 500;
   color: #275993;
   text-align: left;
-  margin: 0;
 }
 
 .tum-logo {
@@ -44,7 +41,7 @@ header {
   font-weight: bold;
   color: #275993;
   text-align: center;
-  margin: 80px 0 30px;
+  margin-bottom: 50px;
 }
 
 /* Cards */
@@ -52,14 +49,32 @@ header {
   display: flex;
   justify-content: center;
   gap: 20px;
-  max-width: 800px;
-  margin: 80px auto 0;
+  max-width: 1000px;
+  margin: auto;
 }
 
 .column {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
+}
+
+.content-block {
+  font-size: 14px; /* Одинаковый размер для всех предложений */
+  color: #919191; /* Серый для всех предложений */
+  line-height: 1.4;
+}
+
+/* Стили для ссылок в левом столбце */
+.column:first-child .content-block a {
+  color: #919191; /* Обычный серый цвет */
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.column:first-child .content-block a:hover {
+  color: #275993; /* Синий цвет при наведении */
+  text-decoration: underline;
 }
 
 .card {
@@ -75,41 +90,25 @@ header {
 .card-title {
   font-size: 18px;
   font-weight: 500;
-  color: #000;
+  color: #000; /* Черный для заголовков */
   margin-bottom: 10px;
 }
 
 .content-block {
-  font-size: 14px;
-  color: #919191;
+  font-size: 14px; /* Одинаковый размер для всех предложений */
+  color: #919191; /* Серый для всех предложений */
   line-height: 1.4;
-}
-
-.icon-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 10px;
-  height: 10px;
-  background-color: #F8F8F8;
-  border-radius: 50%;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.icon-container img {
-  width: 5px; /* Измените ширину */
-  height: 5px; /* Измените высоту */
 }
 
 /* Chat form */
 .chat-form {
   display: flex;
   justify-content: center;
-  position: absolute;
-  bottom: 20px;
+  position: fixed; /* Используем fixed для закрепления снизу */
+  bottom: 20px; /* Расстояние от нижнего края */
   left: 50%;
   transform: translateX(-50%);
+  width: 100%; /* Убедитесь, что она центрирована */
 }
 
 .chat-input {
@@ -118,7 +117,6 @@ header {
   border: 1px solid #ddd;
   border-radius: 30px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  font-size: 14px;
 }
 
 .chat-submit {
@@ -131,5 +129,4 @@ header {
 .send-icon {
   width: 20px;
   height: 20px;
-  filter: invert(60%);
 }

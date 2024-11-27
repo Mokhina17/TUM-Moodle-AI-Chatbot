@@ -5,9 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TUM Moodle GPT</title>
-  <!-- Подключение шрифта Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- Подключение CSS -->
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
@@ -33,13 +31,19 @@
       <div class="column">
         <div class="card">
           <div class="card-title">Examples</div>
-          <div class="content-block">What are the exam requirements for the course? →</div>
+          <div class="content-block">
+            <a href="{% url 'chat' %}?question=weekly_hours">How many weekly hours do I need to commit for this module? →</a>
+            </div>
         </div>
         <div class="card">
-          <div class="content-block">How many weekly hours do I need to commit for this module? →</div>
+          <div class="content-block">
+            <a href="{% url 'chat' %}?question=weekly_hours">How many weekly hours do I need to commit for this module? →</a>
+          </div>
         </div>
         <div class="card">
-          <div class="content-block">What are the recommended books or resources for this course? →</div>
+          <div class="content-block">
+            <a href="{% url 'chat' %}?question=resources">What are the recommended books or resources for this course? →</a>
+          </div>
         </div>
       </div>
       <!-- Средний столбец -->
