@@ -47,12 +47,47 @@
         </div>
       </div>
       <footer>
-        <form class="chat-form">
-          <input type="text" placeholder="Send a message..." />
-          <button type="submit">→</button>
+        <form id="chatForm" class="chat-form">
+          {% csrf_token %}
+          <input id="userInput" type="text" placeholder="Send a message..." />
+            <button type="submit">→</button>
         </form>
+        <div id="responseMessage"></div>
       </footer>
     </div>
   </div>
+<script>
+    document.getElementById('chatForm').addEventListener('submit', async (event) => {
+    event.preventDefault();  // Prevents page reload
+
+    const userInput = document.getElementById('userInput').value;
+    const responseMessage = document.getElementById('responseMessage');
+
+    // Get CSRF token from the cookies
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    try {
+      const response = await fetch('/process_input/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken  // Include CSRF token in request headers
+        },
+        body: JSON.stringify({ user_input: userInput }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        responseMessage.textContent = `Success: ${data.message}`;
+        document.getElementById('userInput').value = '';  // Clear input field
+      } else {
+        responseMessage.textContent = `Error: ${data.error}`;
+      }
+    } catch (error) {
+      responseMessage.textContent = 'Error connecting to the server.';
+    }
+  });
+  </script>
 </body>
 </html>
