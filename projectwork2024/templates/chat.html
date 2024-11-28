@@ -2,15 +2,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta and Title -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TUM Moodle GPT</title>
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
   <div class="container">
-    <!-- Верхний блок с текстом и логотипом -->
+    <!-- Header Section -->
     <header class="header">
       <div class="header-left">
         <h2 class="platform-title">Lernplatform Moodle<br>Technische Universität München</h2>
@@ -20,20 +25,24 @@
       </div>
     </header>
 
-    <!-- Заголовок -->
+    <!-- Main Title -->
     <div class="main-title">
       <h1>TUM Moodle GPT</h1>
     </div>
 
-    <!-- Карточки -->
+    <!-- Three Columns Section -->
     <div class="info-cards">
-      <!-- Левый столбец -->
+      <!-- Examples Column -->
       <div class="column">
         <div class="card">
+          <!-- Example Icon -->
+          <div class="icon-container">
+            <img src="{% static 'images/clean.png' %}" alt="Examples Icon" class="icon">
+          </div>
           <div class="card-title">Examples</div>
           <div class="content-block">
-            <a href="{% url 'chat' %}?question=weekly_hours">How many weekly hours do I need to commit for this module? →</a>
-            </div>
+            <a href="{% url 'chat' %}?question=exam_requirements">What are the exam requirements for the course? →</a>
+          </div>
         </div>
         <div class="card">
           <div class="content-block">
@@ -46,9 +55,14 @@
           </div>
         </div>
       </div>
-      <!-- Средний столбец -->
+
+      <!-- Capabilities Column -->
       <div class="column">
         <div class="card">
+          <!-- Capabilities Icon -->
+          <div class="icon-container">
+            <img src="{% static 'images/star-2.png' %}" alt="Capabilities Icon" class="icon">
+          </div>
           <div class="card-title">Capabilities</div>
           <div class="content-block">Remembers what user said earlier in the conversation.</div>
         </div>
@@ -59,9 +73,14 @@
           <div class="content-block">Rejects irrelevant or inappropriate queries to maintain a productive discussion.</div>
         </div>
       </div>
-      <!-- Правый столбец -->
+
+      <!-- Limitations Column -->
       <div class="column">
         <div class="card">
+          <!-- Limitations Icon -->
+          <div class="icon-container">
+            <img src="{% static 'images/warning.png' %}" alt="Limitations Icon" class="icon">
+          </div>
           <div class="card-title">Limitations</div>
           <div class="content-block">May occasionally generate incorrect information.</div>
         </div>
@@ -71,48 +90,48 @@
       </div>
     </div>
 
-    <!-- Чат -->
+    <!-- Footer with Search Bar -->
     <footer class="footer">
-      <form class="chat-form">
-        <input type="text" class="chat-input" placeholder="Send a message..." />
+      <form id="chatForm" class="chat-form">
+        <!-- Input Field -->
+        <input type="text" id="userInput" class="chat-input" placeholder="Send a message...">
+        <!-- Send Button -->
         <button type="submit" class="chat-submit">
           <img src="{% static 'images/2582606.png' %}" alt="Send" class="send-icon">
         </button>
       </form>
     </footer>
   </div>
-<script>
+
+  <!-- Chat Form JavaScript -->
+  <script>
     document.getElementById('chatForm').addEventListener('submit', async (event) => {
-    event.preventDefault();  // Prevents page reload
+      event.preventDefault();
 
-    const userInput = document.getElementById('userInput').value;
-    const responseMessage = document.getElementById('responseMessage');
+      const userInput = document.getElementById('userInput').value;
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    // Get CSRF token from the cookies
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      try {
+        const response = await fetch('/process_input/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+          },
+          body: JSON.stringify({ user_input: userInput }),
+        });
 
-    try {
-      const response = await fetch('/process_input/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken  // Include CSRF token in request headers
-        },
-        body: JSON.stringify({ user_input: userInput }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        responseMessage.textContent = `Success: ${data.message}`;
-        document.getElementById('userInput').value = '';  // Clear input field
-      } else {
-        responseMessage.textContent = `Error: ${data.error}`;
+        const data = await response.json();
+        if (response.ok) {
+          alert(`Success: ${data.message}`);
+          document.getElementById('userInput').value = ''; // Clear input
+        } else {
+          alert(`Error: ${data.error}`);
+        }
+      } catch (error) {
+        alert('Error connecting to the server.');
       }
-    } catch (error) {
-      responseMessage.textContent = 'Error connecting to the server.';
-    }
-  });
+    });
   </script>
 </body>
 </html>

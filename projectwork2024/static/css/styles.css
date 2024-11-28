@@ -1,4 +1,4 @@
-/* Основные стили */
+/* Global Styles */
 body {
   margin: 0;
   padding: 0;
@@ -16,7 +16,7 @@ body {
   padding: 20px;
 }
 
-/* Header */
+/* Header Styles */
 header {
   display: flex;
   justify-content: space-between;
@@ -35,7 +35,7 @@ header {
   width: 80px;
 }
 
-/* Title */
+/* Main Title */
 .main-title h1 {
   font-size: 40px;
   font-weight: bold;
@@ -44,7 +44,7 @@ header {
   margin-bottom: 50px;
 }
 
-/* Cards */
+/* Cards Section */
 .info-cards {
   display: flex;
   justify-content: center;
@@ -59,24 +59,7 @@ header {
   gap: 15px;
 }
 
-.content-block {
-  font-size: 14px; /* Одинаковый размер для всех предложений */
-  color: #919191; /* Серый для всех предложений */
-  line-height: 1.4;
-}
-
-/* Стили для ссылок в левом столбце */
-.column:first-child .content-block a {
-  color: #919191; /* Обычный серый цвет */
-  text-decoration: none;
-  transition: color 0.2s ease, text-decoration 0.2s ease;
-}
-
-.column:first-child .content-block a:hover {
-  color: #275993; /* Синий цвет при наведении */
-  text-decoration: underline;
-}
-
+/* Individual Cards */
 .card {
   background-color: white;
   border-radius: 30px;
@@ -90,25 +73,55 @@ header {
 .card-title {
   font-size: 18px;
   font-weight: 500;
-  color: #000; /* Черный для заголовков */
+  color: #000;
   margin-bottom: 10px;
 }
 
 .content-block {
-  font-size: 14px; /* Одинаковый размер для всех предложений */
-  color: #919191; /* Серый для всех предложений */
+  font-size: 14px;
+  color: #919191;
   line-height: 1.4;
 }
 
-/* Chat form */
+/* Hover Effects for Links in the Left Column */
+.column:first-child .content-block a {
+  color: #919191;
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.column:first-child .content-block a:hover {
+  color: #275993;
+  text-decoration: underline;
+}
+
+/* Circle Icons */
+.icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  background-color: #F8F8F8;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.icon-container img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Chat Form */
 .chat-form {
   display: flex;
   justify-content: center;
-  position: fixed; /* Используем fixed для закрепления снизу */
-  bottom: 20px; /* Расстояние от нижнего края */
+  position: fixed;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%; /* Убедитесь, что она центрирована */
+  width: 100%;
 }
 
 .chat-input {
@@ -129,4 +142,22 @@ header {
 .send-icon {
   width: 20px;
   height: 20px;
+  filter: invert(60%); /* Gray color */
+}
+
+/* Circle Above Card Titles */
+.card .icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #F8F8F8;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card .icon-circle img {
+  width: 24px;
+  height: 24px;
 }
