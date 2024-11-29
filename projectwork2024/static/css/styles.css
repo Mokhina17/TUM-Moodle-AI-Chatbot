@@ -24,15 +24,18 @@ header {
   margin-bottom: 20px;
 }
 
-.header-left .platform-title {
-  font-size: 15px;
-  font-weight: 500;
-  color: #275993;
-  text-align: left;
+.header-left {
+  position: absolute; /* Фиксируем позицию */
+  top: 20px; /* Расстояние сверху */
+  left: 20px; /* Расстояние слева */
+  z-index: 200; /* Выше слайд-бара */
 }
 
 .tum-logo {
   width: 80px;
+  position: absolute;
+  right: 20px; /* Расстояние от правого края */
+  top: 20px; /* Расстояние сверху */
 }
 
 /* Main Title */
@@ -42,6 +45,15 @@ header {
   color: #275993;
   text-align: center;
   margin-bottom: 50px;
+}
+
+.platform-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #275993;
+  line-height: 1.5;
+  margin: 0;
+  text-align: left;
 }
 
 /* Cards Section */
@@ -160,4 +172,137 @@ header {
 .card .icon-circle img {
   width: 24px;
   height: 24px;
+}
+
+/* Slide Bar */
+.slide-bar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: #E7F7FF;
+  border-radius: 0 40px 40px 0;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  padding: 80px 20px 20px; /* Добавляем отступ сверху, чтобы не перекрывать текст */
+  box-sizing: border-box;
+  transition: left 0.3s ease;
+  z-index: 100;
+}
+
+.slide-bar .platform-title {
+  font-size: 15px;
+  font-weight: 500; /* Inter Medium */
+  color: #275993; /* Blue color */
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.slide-bar.active {
+  left: 0;
+}
+
+.menu-btn.shifted {
+  left: 300px;
+}
+
+.chat-history .chat-item {
+  background-color: #E7F7FF;
+  border-radius: 22px; /* Закругленные углы */
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(39, 89, 147, 0.2); /* Тень, как у блоков */
+  font-size: 14px;
+  color: #275993;
+  border: 1px solid #E7E7E7;
+  text-align: left;
+}
+
+.chat-history .chat-item:hover {
+  box-shadow: 0 6px 12px rgba(39, 89, 147, 0.3); /* Усиленная тень */
+}
+
+.chat-title {
+  font-size: 14px;
+  font-weight: medium;
+  color: #000;
+}
+
+.chat-question {
+  font-size: 12px;
+  color: #919191;
+  margin-top: 5px;
+}
+
+.new-chat-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #275993;
+  color: white;
+  border: 1px solid #E7E7E7; /* Серый контур */
+  box-shadow: 0 4px 10px rgba(39, 89, 147, 0.2); /* Тень */
+  padding: 10px 70px; /* Увеличиваем длину кнопки */
+  font-size: 17px; /* Средний размер шрифта */
+  font-weight: 500;
+  border-radius: 20px; /* Закругленные края */
+  cursor: pointer; /* Указатель мыши */
+  text-align: center;
+  white-space: nowrap; /* Отключаем перенос текста */
+}
+
+.new-chat-btn:hover {
+  box-shadow: 0 6px 12px rgba(39, 89, 147, 0.3); /* Stronger shadow on hover */
+}
+
+/* Menu Button */
+/* Adjusting the dots for the slide bar toggle button */
+.menu-btn {
+  position: fixed;
+  top: 50%;
+  left: 10px; /* Align closer to the left */
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 100;
+}
+
+.menu-btn .dot {
+  width: 4px; /* Smaller width */
+  height: 4px; /* Smaller height */
+  background-color: #919191; /* Grey color */
+  border-radius: 50%; /* Circular */
+  margin: 4px 0; /* Spacing between dots */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* When the slide bar is active, adjust the position of the dots */
+.menu-btn.shifted {
+  left: 300px; /* Move along with the slide bar */
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 0; /* По умолчанию */
+  transition: margin-left 0.3s ease;
+  padding-top: 50px; /* Отступ сверху */
+}
+
+.main-content.shifted {
+  margin-left: 300px; /* Сдвиг при активном слайд-баре */
+}
+
+/* Chat Form */
+.chat-form {
+  position: fixed;
+  bottom: 20px;
+  left: 50%; /* Изначально по центру */
+  transform: translateX(-50%);
+  transition: left 0.3s ease; /* Плавное движение */
+  display: flex;
+  justify-content: center;
+}
+
+.chat-form.shifted {
+  left: calc(50% + 150px); /* Смещение вправо на половину ширины слайд-бара */
 }
