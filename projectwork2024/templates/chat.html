@@ -15,122 +15,130 @@
 </head>
 <body>
   <div class="container">
-    <!-- Header Section -->
-    <header class="header">
-      <div class="header-left">
-        <h2 class="platform-title">Lernplatform Moodle<br>Technische Universität München</h2>
+    <!-- Slide Bar -->
+    <div id="slideBar" class="slide-bar">
+      <div class="chat-history">
+        <div class="chat-item">
+          <div class="chat-title">Previous Chat 1</div>
+          <div class="chat-question">What are the exam requirements?</div>
+        </div>
+        <div class="chat-item">
+          <div class="chat-title">Previous Chat 2</div>
+          <div class="chat-question">How many weekly hours?</div>
+        </div>
+        <div class="chat-item">
+          <div class="chat-title">Previous Chat 3</div>
+          <div class="chat-question">What are the resources?</div>
+        </div>
       </div>
-      <div class="header-right">
-        <img src="{% static 'images/tum_logo.svg' %}" alt="TUM Logo" class="tum-logo">
-      </div>
-    </header>
-
-    <!-- Main Title -->
-    <div class="main-title">
-      <h1>TUM Moodle GPT</h1>
+      <button class="new-chat-btn">New Chat</button>
     </div>
 
-    <!-- Three Columns Section -->
-    <div class="info-cards">
-      <!-- Examples Column -->
-      <div class="column">
-        <div class="card">
-          <!-- Example Icon -->
-          <div class="icon-container">
-            <img src="{% static 'images/clean.png' %}" alt="Examples Icon" class="icon">
-          </div>
-          <div class="card-title">Examples</div>
-          <div class="content-block">
-            <a href="{% url 'chat' %}?question=exam_requirements">What are the exam requirements for the course? →</a>
-          </div>
-        </div>
-        <div class="card">
-          <div class="content-block">
-            <a href="{% url 'chat' %}?question=weekly_hours">How many weekly hours do I need to commit for this module? →</a>
-          </div>
-        </div>
-        <div class="card">
-          <div class="content-block">
-            <a href="{% url 'chat' %}?question=resources">What are the recommended books or resources for this course? →</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Capabilities Column -->
-      <div class="column">
-        <div class="card">
-          <!-- Capabilities Icon -->
-          <div class="icon-container">
-            <img src="{% static 'images/star-2.png' %}" alt="Capabilities Icon" class="icon">
-          </div>
-          <div class="card-title">Capabilities</div>
-          <div class="content-block">Remembers what user said earlier in the conversation.</div>
-        </div>
-        <div class="card">
-          <div class="content-block">Understands and answers questions about courses, schedules, and Moodle-related topics.</div>
-        </div>
-        <div class="card">
-          <div class="content-block">Rejects irrelevant or inappropriate queries to maintain a productive discussion.</div>
-        </div>
-      </div>
-
-      <!-- Limitations Column -->
-      <div class="column">
-        <div class="card">
-          <!-- Limitations Icon -->
-          <div class="icon-container">
-            <img src="{% static 'images/warning.png' %}" alt="Limitations Icon" class="icon">
-          </div>
-          <div class="card-title">Limitations</div>
-          <div class="content-block">May occasionally generate incorrect information.</div>
-        </div>
-        <div class="card">
-          <div class="content-block">Cannot address issues or updates outside the Moodle platform or TUM-related systems.</div>
-        </div>
-      </div>
+    <!-- Menu Button -->
+    <div id="menuBtn" class="menu-btn">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
     </div>
 
-    <!-- Footer with Search Bar -->
-    <footer class="footer">
-      <form id="chatForm" class="chat-form">
-        <!-- Input Field -->
-        <input type="text" id="userInput" class="chat-input" placeholder="Send a message...">
-        <!-- Send Button -->
-        <button type="submit" class="chat-submit">
-          <img src="{% static 'images/2582606.png' %}" alt="Send" class="send-icon">
-        </button>
-      </form>
-    </footer>
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Header Section -->
+      <header class="header">
+        <div class="header-left">
+          <h2 class="platform-title">Lernplatform Moodle<br>Technische Universität München</h2>
+        </div>
+        <div class="header-right">
+          <img src="{% static 'images/tum_logo.svg' %}" alt="TUM Logo" class="tum-logo">
+        </div>
+      </header>
+
+      <!-- Main Title -->
+      <div class="main-title">
+        <h1>TUM Moodle GPT</h1>
+      </div>
+
+      <!-- Three Columns Section -->
+      <div class="info-cards">
+        <!-- Examples Column -->
+        <div class="column">
+          <div class="card">
+            <div class="icon-container">
+              <img src="{% static 'images/clean.png' %}" alt="Examples Icon" class="icon">
+            </div>
+            <div class="card-title">Examples</div>
+            <div class="content-block">
+              <a href="{% url 'chat' %}?question=exam_requirements">What are the exam requirements for the course? →</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="content-block">
+              <a href="{% url 'chat' %}?question=weekly_hours">How many weekly hours do I need to commit for this module? →</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="content-block">
+              <a href="{% url 'chat' %}?question=resources">What are the recommended books or resources for this course? →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capabilities Column -->
+        <div class="column">
+          <div class="card">
+            <div class="icon-container">
+              <img src="{% static 'images/star-2.png' %}" alt="Capabilities Icon" class="icon">
+            </div>
+            <div class="card-title">Capabilities</div>
+            <div class="content-block">Remembers what user said earlier in the conversation.</div>
+          </div>
+          <div class="card">
+            <div class="content-block">Understands and answers questions about courses, schedules, and Moodle-related topics.</div>
+          </div>
+          <div class="card">
+            <div class="content-block">Rejects irrelevant or inappropriate queries to maintain a productive discussion.</div>
+          </div>
+        </div>
+
+        <!-- Limitations Column -->
+        <div class="column">
+          <div class="card">
+            <div class="icon-container">
+              <img src="{% static 'images/warning.png' %}" alt="Limitations Icon" class="icon">
+            </div>
+            <div class="card-title">Limitations</div>
+            <div class="content-block">May occasionally generate incorrect information.</div>
+          </div>
+          <div class="card">
+            <div class="content-block">Cannot address issues or updates outside the Moodle platform or TUM-related systems.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer with Search Bar -->
+      <footer class="footer">
+        <form id="chatForm" class="chat-form">
+          {% csrf_token %}
+          <input type="text" id="userInput" class="chat-input" placeholder="Send a message...">
+          <button type="submit" class="chat-submit">
+            <img src="{% static 'images/2582606.png' %}" alt="Send" class="send-icon">
+          </button>
+        </form>
+      </footer>
+    </div>
   </div>
 
-  <!-- Chat Form JavaScript -->
+  <!-- JavaScript -->
   <script>
-    document.getElementById('chatForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
+    const menuBtn = document.getElementById('menuBtn');
+    const slideBar = document.getElementById('slideBar');
+    const mainContent = document.querySelector('.main-content');
+    const chatForm = document.querySelector('.chat-form'); // Строка ввода запросов
 
-      const userInput = document.getElementById('userInput').value;
-      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-      try {
-        const response = await fetch('/process_input/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-          },
-          body: JSON.stringify({ user_input: userInput }),
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-          alert(`Success: ${data.message}`);
-          document.getElementById('userInput').value = ''; // Clear input
-        } else {
-          alert(`Error: ${data.error}`);
-        }
-      } catch (error) {
-        alert('Error connecting to the server.');
-      }
+    menuBtn.addEventListener('click', () => {
+      slideBar.classList.toggle('active');
+      mainContent.classList.toggle('shifted');
+      chatForm.classList.toggle('shifted'); // Смещение строки ввода запросов
     });
   </script>
 </body>
