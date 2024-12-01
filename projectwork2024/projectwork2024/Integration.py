@@ -1,8 +1,8 @@
 from transformers import pipeline
 
-class Phi35Instruct:
+class Model:
     def __init__(self):
-        self.model = pipeline("text-generation", model="HuggingFaceTB/SmolLM-135M")
+        self.model = pipeline(model="Intel/dynamic_tinybert")
 
     def generate_response(self, prompt, relevant_docs):
         if self.model is None:
@@ -10,13 +10,19 @@ class Phi35Instruct:
         
         # Combine the user's query with the relevant documents
         context = "\n".join([doc for doc, _ in relevant_docs])
-        full_prompt = f"{prompt}\n\nContext:\n{context}"
         
-        response = self.model(full_prompt, max_length=2048,truncation=True)
-        return response[0]['generated_text']
+        # Format the input correctly for the question-answering pipeline
+        input_data = {
+            "question": prompt,
+            "context": context
+        }
+        
+        response = self.model(input_data)
+        return response['answer']
 
 # Example usage
 if __name__ == "__main__":
-    phi_model = Phi35Instruct()
-    response = phi_model.generate_response("Hello, how are you?")
+    model = Model()
+    relevant_docs = [("Relevant document 1", 0.1), ("Relevant document 2", 0.2)]
+    response = model.generate_response("Hello, how are you?", relevant_docs)
     print(response)

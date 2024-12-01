@@ -2,12 +2,12 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .DocStore import DocStore
-from .Integration import Phi35Instruct
+from .Integration import Model
 import json
 
-# Initialize DocStore and Phi35Instruct
+# Initialize DocStore and Model
 doc_store = DocStore()
-phi_model = Phi35Instruct()
+model = Model()
 
 def chat_interface(request):
     question = request.GET.get('question', '')
@@ -23,8 +23,8 @@ def chat_response(request):
         # Retrieve relevant documents using RAG
         relevant_docs = doc_store.search(user_query, k=1)
         
-        # Generate response using SmolLM
-        response = phi_model.generate_response(user_query,relevant_docs)
+        # Generate response using model
+        response = model.generate_response(user_query,relevant_docs)
         
         # Prepare the response data
         response_data = {
