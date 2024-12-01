@@ -1,4 +1,4 @@
-/* Global Styles */
+/* Styles */
 body {
   margin: 0;
   padding: 0;
@@ -16,7 +16,7 @@ body {
   padding: 20px;
 }
 
-/* Header Styles */
+/* Header */
 header {
   display: flex;
   justify-content: space-between;
@@ -38,7 +38,7 @@ header {
   top: 20px; /* Расстояние сверху */
 }
 
-/* Main Title */
+/* Main title */
 .main-title h1 {
   font-size: 40px;
   font-weight: bold;
@@ -56,7 +56,7 @@ header {
   text-align: left;
 }
 
-/* Cards Section */
+/* Cards section */
 .info-cards {
   display: flex;
   justify-content: center;
@@ -71,7 +71,7 @@ header {
   gap: 15px;
 }
 
-/* Individual Cards */
+/* Individual cards */
 .card {
   background-color: white;
   border-radius: 30px;
@@ -95,7 +95,6 @@ header {
   line-height: 1.4;
 }
 
-/* Hover Effects for Links in the Left Column */
 .column:first-child .content-block a {
   color: #919191;
   text-decoration: none;
@@ -107,7 +106,7 @@ header {
   text-decoration: underline;
 }
 
-/* Circle Icons */
+/* Circles */
 .icon-container {
   display: flex;
   justify-content: center;
@@ -157,7 +156,7 @@ header {
   filter: invert(60%); /* Gray color */
 }
 
-/* Circle Above Card Titles */
+/* Circle icons */
 .card .icon-circle {
   width: 48px;
   height: 48px;
@@ -174,7 +173,7 @@ header {
   height: 24px;
 }
 
-/* Slide Bar */
+/* Slide bar */
 .slide-bar {
   position: fixed;
   top: 0;
@@ -241,68 +240,66 @@ header {
   transform: translateX(-50%);
   background-color: #275993;
   color: white;
-  border: 1px solid #E7E7E7; /* Серый контур */
-  box-shadow: 0 4px 10px rgba(39, 89, 147, 0.2); /* Тень */
-  padding: 10px 70px; /* Увеличиваем длину кнопки */
-  font-size: 17px; /* Средний размер шрифта */
+  border: 1px solid #E7E7E7;
+  box-shadow: 0 4px 10px rgba(39, 89, 147, 0.2);
+  padding: 10px 70px;
+  font-size: 17px;
   font-weight: 500;
-  border-radius: 20px; /* Закругленные края */
-  cursor: pointer; /* Указатель мыши */
+  border-radius: 20px;
+  cursor: pointer;
   text-align: center;
-  white-space: nowrap; /* Отключаем перенос текста */
+  white-space: nowrap;
 }
 
 .new-chat-btn:hover {
-  box-shadow: 0 6px 12px rgba(39, 89, 147, 0.3); /* Stronger shadow on hover */
+  box-shadow: 0 6px 12px rgba(39, 89, 147, 0.3);
 }
 
-/* Menu Button */
-/* Adjusting the dots for the slide bar toggle button */
+/* Menu button */
 .menu-btn {
   position: fixed;
   top: 50%;
-  left: 10px; /* Align closer to the left */
+  left: 10px;
   transform: translateY(-50%);
   cursor: pointer;
   z-index: 100;
 }
 
 .menu-btn .dot {
-  width: 4px; /* Smaller width */
-  height: 4px; /* Smaller height */
-  background-color: #919191; /* Grey color */
-  border-radius: 50%; /* Circular */
-  margin: 4px 0; /* Spacing between dots */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  width: 4px;
+  height: 4px;
+  background-color: #919191;
+  border-radius: 50%;
+  margin: 4px 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* When the slide bar is active, adjust the position of the dots */
 .menu-btn.shifted {
-  left: 300px; /* Move along with the slide bar */
+  left: 300px;
 }
 
-/* Main Content */
+/* Main content */
 .main-content {
-  margin-left: 0; /* По умолчанию */
+  margin-left: 0;
   transition: margin-left 0.3s ease;
-  padding-top: 50px; /* Отступ сверху */
+  padding-top: 50px;
 }
 
 .main-content.shifted {
-  margin-left: 300px; /* Сдвиг при активном слайд-баре */
+  margin-left: 300px;
 }
 
-/* Chat Form */
+/* Chat */
 .chat-form {
   position: fixed;
   bottom: 20px;
-  left: 50%; /* Изначально по центру */
+  left: 50%;
   transform: translateX(-50%);
-  transition: left 0.3s ease; /* Плавное движение */
+  transition: left 0.3s ease;
   display: flex;
   justify-content: center;
 }
 
 .chat-form.shifted {
-  left: calc(50% + 150px); /* Смещение вправо на половину ширины слайд-бара */
+  left: calc(50% + 150px);
 }
