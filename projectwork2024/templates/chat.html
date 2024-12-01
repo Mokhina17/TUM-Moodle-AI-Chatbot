@@ -124,6 +124,7 @@
             <img src="{% static 'images/2582606.png' %}" alt="Send" class="send-icon">
           </button>
         </form>
+        <div id="chatContainer" class="chat-container"></div>
       </footer>
     </div>
   </div>
@@ -133,12 +134,36 @@
     const menuBtn = document.getElementById('menuBtn');
     const slideBar = document.getElementById('slideBar');
     const mainContent = document.querySelector('.main-content');
-    const chatForm = document.querySelector('.chat-form'); // Строка ввода запросов
+    const chatForm = document.querySelector('.chat-form');
+    const chatContainer = document.getElementById('chatContainer');
 
     menuBtn.addEventListener('click', () => {
       slideBar.classList.toggle('active');
       mainContent.classList.toggle('shifted');
-      chatForm.classList.toggle('shifted'); // Смещение строки ввода запросов
+      chatForm.classList.toggle('shifted');
+    });
+
+    chatForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const userInput = document.getElementById('userInput').value;
+      const response = await fetch('/chat_response/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({ user_query: userInput })
+      });
+      const data = await response.json();
+      chatContainer.innerHTML += `
+        <div class="chat-message user-message">
+          <div class="message-content">${data.user_query}</div>
+        </div>
+        <div class="chat-message bot-message">
+          <div class="message-content">${data.response}</div>
+        </div>
+      `;
+      document.getElementById('userInput').value = '';
     });
   </script>
 </body>

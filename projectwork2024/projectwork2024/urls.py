@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('chat/', views.chat_interface, name='chat'),
     path('', views.chat_interface, name='home'),
+    path('chat_response/', views.chat_response, name='chat_response'),
 ]
