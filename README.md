@@ -11,3 +11,12 @@ To make contributions we will each create individual branches for various assign
 Code will need review before integration to ensure we do not run into serious merge conflicts or errors.
 
 To make contributions clone the repository, create a new branch, version changes, commit and push them to the prerequisite branch.
+
+In case you find that the repository and code isn't running, please ensure that you install all the necessary requirements for the backend.
+This can be done by ensuring you're in the root directory of the project (where the requirements.txt file is located) and then using:
+
+```bash
+  pip install -r requirements.txt 
+```
+
+in the terminal of your code editor or otherwise.
