@@ -303,3 +303,39 @@ header {
 .chat-form.shifted {
   left: calc(50% + 150px);
 }
+
+/* Chat container */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 150px);
+  margin-bottom: 70px; /* Avoid overlap with input */
+}
+
+/* Chat message styles */
+.chat-message {
+  display: flex;
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+.user-message {
+  align-self: flex-end;
+  background-color: #E7F7FF; /* Light blue */
+  color: #275993; /* Dark blue text */
+  text-align: right;
+}
+
+.bot-message {
+  align-self: flex-start;
+  background-color: #F8F8F8; /* Light gray */
+  color: #000; /* Black text */
+  text-align: left;
+}
