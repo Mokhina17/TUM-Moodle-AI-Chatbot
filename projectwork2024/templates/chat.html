@@ -9,8 +9,6 @@
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
@@ -18,20 +16,21 @@
     <!-- Slide bar -->
     <div id="slideBar" class="slide-bar">
       <div class="chat-history">
-        <div class="chat-item">
+        <!-- Dynamic Previous Chats -->
+        <div class="chat-item" onclick="loadChat(1)">
           <div class="chat-title">Previous Chat 1</div>
           <div class="chat-question">What are the exam requirements?</div>
         </div>
-        <div class="chat-item">
+        <div class="chat-item" onclick="loadChat(2)">
           <div class="chat-title">Previous Chat 2</div>
           <div class="chat-question">How many weekly hours?</div>
         </div>
-        <div class="chat-item">
+        <div class="chat-item" onclick="loadChat(3)">
           <div class="chat-title">Previous Chat 3</div>
           <div class="chat-question">What are the resources?</div>
         </div>
       </div>
-      <button class="new-chat-btn">New Chat</button>
+      <button class="new-chat-btn" onclick="startNewChat()">New Chat</button>
     </div>
 
     <!-- Menu button -->
@@ -59,7 +58,7 @@
       </div>
 
       <!-- Three columns -->
-      <div class="info-cards">
+      <div id="infoCards" class="info-cards">
         <!-- Examples -->
         <div class="column">
           <div class="card">
@@ -115,6 +114,11 @@
         </div>
       </div>
 
+      <!-- Chat container -->
+      <div id="chatContainer" class="chat-container">
+        <!-- Chat messages will be dynamically added here -->
+      </div>
+
       <!-- Footer with search bar -->
       <footer class="footer">
         <form id="chatForm" class="chat-form">
@@ -124,7 +128,6 @@
             <img src="{% static 'images/2582606.png' %}" alt="Send" class="send-icon">
           </button>
         </form>
-        <div id="chatContainer" class="chat-container"></div>
       </footer>
     </div>
   </div>
@@ -134,36 +137,73 @@
     const menuBtn = document.getElementById('menuBtn');
     const slideBar = document.getElementById('slideBar');
     const mainContent = document.querySelector('.main-content');
-    const chatForm = document.querySelector('.chat-form');
+    const infoCards = document.getElementById('infoCards');
     const chatContainer = document.getElementById('chatContainer');
+    const chatForm = document.querySelector('.chat-form');
 
+    // Slide bar toggle
     menuBtn.addEventListener('click', () => {
       slideBar.classList.toggle('active');
       mainContent.classList.toggle('shifted');
       chatForm.classList.toggle('shifted');
     });
 
+    // Start a new chat
+    function startNewChat() {
+      chatContainer.innerHTML = '';
+      if (infoCards) infoCards.style.display = 'flex';
+      document.getElementById('userInput').value = '';
+    }
+
+    // Load previous chats
+    function loadChat(chatId) {
+      alert(`Loading chat ${chatId}...`);
+    }
+
+    // Submit chat form
     chatForm.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const userInput = document.getElementById('userInput').value;
-      const response = await fetch('/chat_response/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-        },
-        body: JSON.stringify({ user_query: userInput })
-      });
-      const data = await response.json();
+
+      const userInput = document.getElementById('userInput').value.trim();
+      if (!userInput) return;
       chatContainer.innerHTML += `
         <div class="chat-message user-message">
-          <div class="message-content">${data.user_query}</div>
-        </div>
-        <div class="chat-message bot-message">
-          <div class="message-content">${data.response}</div>
+          <div class="message-content">${userInput}</div>
         </div>
       `;
+
       document.getElementById('userInput').value = '';
+      if (infoCards) infoCards.style.display = 'none';
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      try {
+        const response = await fetch('/chat_response/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+          body: JSON.stringify({ user_query: userInput }),
+        });
+
+        const data = await response.json()
+        chatContainer.innerHTML += `
+          <div class="chat-message bot-message">
+            <div class="message-content">${data.response}</div>
+          </div>
+        `;
+
+
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      } catch (error) {
+        console.error('Error:', error);
+        chatContainer.innerHTML += `
+          <div class="chat-message error-message">
+            <div class="message-content">Error: Unable to connect to the server. Please try again later.</div>
+          </div>
+        `;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
     });
   </script>
 </body>

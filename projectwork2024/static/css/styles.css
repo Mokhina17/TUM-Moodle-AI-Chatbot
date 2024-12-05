@@ -25,17 +25,17 @@ header {
 }
 
 .header-left {
-  position: absolute; /* Фиксируем позицию */
-  top: 20px; /* Расстояние сверху */
-  left: 20px; /* Расстояние слева */
-  z-index: 200; /* Выше слайд-бара */
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 200;
 }
 
 .tum-logo {
   width: 80px;
   position: absolute;
-  right: 20px; /* Расстояние от правого края */
-  top: 20px; /* Расстояние сверху */
+  right: 20px;
+  top: 20px;
 }
 
 /* Main title */
@@ -63,6 +63,10 @@ header {
   gap: 20px;
   max-width: 1000px;
   margin: auto;
+}
+
+.info-cards.hidden {
+  display: none;
 }
 
 .column {
@@ -125,6 +129,17 @@ header {
 }
 
 /* Chat Form */
+.chat-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow-y: auto;
+  max-height: 400px;
+  border: none;
+}
+
 .chat-form {
   display: flex;
   justify-content: center;
@@ -153,7 +168,7 @@ header {
 .send-icon {
   width: 20px;
   height: 20px;
-  filter: invert(60%); /* Gray color */
+  filter: invert(60%);
 }
 
 /* Circle icons */
@@ -183,7 +198,7 @@ header {
   background-color: #E7F7FF;
   border-radius: 0 40px 40px 0;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  padding: 80px 20px 20px; /* Добавляем отступ сверху, чтобы не перекрывать текст */
+  padding: 80px 20px 20px;
   box-sizing: border-box;
   transition: left 0.3s ease;
   z-index: 100;
@@ -191,8 +206,8 @@ header {
 
 .slide-bar .platform-title {
   font-size: 15px;
-  font-weight: 500; /* Inter Medium */
-  color: #275993; /* Blue color */
+  font-weight: 500;
+  color: #275993;
   text-align: left;
   margin-bottom: 20px;
 }
@@ -207,10 +222,10 @@ header {
 
 .chat-history .chat-item {
   background-color: #E7F7FF;
-  border-radius: 22px; /* Закругленные углы */
+  border-radius: 22px;
   padding: 15px;
   margin-bottom: 15px;
-  box-shadow: 0 4px 10px rgba(39, 89, 147, 0.2); /* Тень, как у блоков */
+  box-shadow: 0 4px 10px rgba(39, 89, 147, 0.2);
   font-size: 14px;
   color: #275993;
   border: 1px solid #E7E7E7;
@@ -218,7 +233,7 @@ header {
 }
 
 .chat-history .chat-item:hover {
-  box-shadow: 0 6px 12px rgba(39, 89, 147, 0.3); /* Усиленная тень */
+  box-shadow: 0 6px 12px rgba(39, 89, 147, 0.3);
 }
 
 .chat-title {
@@ -295,11 +310,53 @@ header {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  transition: left 0.3s ease;
   display: flex;
   justify-content: center;
 }
 
 .chat-form.shifted {
   left: calc(50% + 150px);
+}
+
+/* User message */
+.chat-message.user-message {
+  text-align: right;
+  margin: 10px 0;
+}
+
+.chat-message.user-message .message-content {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #000;
+  padding: 10px 15px;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Bot message */
+.chat-message.bot-message {
+  text-align: left;
+  margin: 10px 0;
+}
+
+.chat-message.bot-message .message-content {
+  display: inline-block;
+  background-color: #275993;
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Info cards visibility */
+.info-cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.info-cards.hidden {
+  display: none;
 }
