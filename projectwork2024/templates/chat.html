@@ -130,146 +130,163 @@
             <img src="{% static 'images/2582606.png' %}" alt="Send" class="send-icon">
           </button>
         </form>
-          <div id="chatContainer" class="chat-container">
-            <!-- Example of a user message -->
-            <div class="chat-message user-message">
-              <div class="message-content">This is a user message.</div>
-            </div>
-
-            <!-- Example of a bot message -->
-            <div class="chat-message bot-message">
-              <div class="message-content">This is a chatbot response.</div>
-            </div>
+        <div id="chatContainer" class="chat-container">
+          <!-- Example of a user message -->
+          <div class="chat-message user-message">
+            <div class="message-content">This is a user message.</div>
           </div>
 
+          <!-- Example of a bot message -->
+          <div class="chat-message bot-message">
+            <div class="message-content">This is a chatbot response.</div>
+          </div>
+
+          <!-- Placeholder for the loading message -->
+          <div class="chat-message loading-message" id="loadingMessage" style="display: none;">
+            <div class="message-content">
+              <div class="loading-animation"></div>
+              <p>Loading...</p>
+            </div>
+          </div>
+          <!-- Loading screen -->
+          <div id="loading-screen" class="loading-screen" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+          </div>
+        </div>
       </footer>
     </div>
   </div>
 
+
+
   <!-- JavaScript -->
   <script>
-  // Menu button toggle
-  const menuBtn = document.getElementById('menuBtn');
-  const slideBar = document.getElementById('slideBar');
-  const mainContent = document.querySelector('.main-content');
-  const chatForm = document.querySelector('.chat-form');
-  const chatContainer = document.getElementById('chatContainer');
+    // Get the loading screen element
+    const loadingScreen = document.getElementById('loading-screen');
 
-  menuBtn.addEventListener('click', () => {
-    slideBar.classList.toggle('active');
-    mainContent.classList.toggle('shifted');
-    chatForm.classList.toggle('shifted');
-  });
+    // Function to show the loading screen
+    function showLoadingScreen() {
+      loadingScreen.style.display = 'flex';
+    }
 
-  // Function to append messages dynamically
-  function addChatMessage(message, isUser = false) {
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('chat-message', isUser ? 'user-message' : 'bot-message');
+    // Function to hide the loading screen
+    function hideLoadingScreen() {
+      loadingScreen.style.display = 'none';
+    }
 
-    const messageContent = document.createElement('div');
-    messageContent.classList.add('message-content');
-    messageContent.textContent = message;
+    // Menu button toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const slideBar = document.getElementById('slideBar');
+    const mainContent = document.querySelector('.main-content');
+    const chatForm = document.querySelector('.chat-form');
+    const chatContainer = document.getElementById('chatContainer');
+    const loadingMessage = document.getElementById('loadingMessage');
 
-    messageDiv.appendChild(messageContent);
-    chatContainer.appendChild(messageDiv);
+    menuBtn.addEventListener('click', () => {
+      slideBar.classList.toggle('active');
+      mainContent.classList.toggle('shifted');
+      chatForm.classList.toggle('shifted');
+    });
 
-    // Scroll to the bottom of the chat container
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }
+    // Function to append messages dynamically
+    function addChatMessage(message, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('chat-message', isUser ? 'user-message' : 'bot-message');
 
-  // Handle Question Links
-  document.addEventListener("DOMContentLoaded", () => {
-    const exampleLinks = document.querySelectorAll(".example-link");
+      const messageContent = document.createElement('div');
+      messageContent.classList.add('message-content');
+      messageContent.textContent = message;
 
-    exampleLinks.forEach(link => {
-      link.addEventListener("click", async (event) => {
-        event.preventDefault();
+      messageDiv.appendChild(messageContent);
+      chatContainer.appendChild(messageDiv);
 
-        const question = link.getAttribute("data-question");
-        if (!question) return;
+      // Scroll to the bottom of the chat container
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 
-        const chatContainer = document.getElementById("chatContainer");
+    // Handle form submission for chat
+    chatForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
 
-        const addChatMessage = (message, isUser = false) => {
-          const messageDiv = document.createElement("div");
-          messageDiv.classList.add("chat-message", isUser ? "user-message" : "bot-message");
+      const userInput = document.getElementById('userInput').value.trim();
 
-          const messageContent = document.createElement("div");
-          messageContent.classList.add("message-content");
-          messageContent.textContent = message;
+      if (userInput === '') return; // Prevent empty messages
 
-          messageDiv.appendChild(messageContent);
-          chatContainer.appendChild(messageDiv);
-          chatContainer.scrollTop = chatContainer.scrollHeight;
-        };
+      // Append user message and show loading screen
+      addChatMessage(userInput, true);
+      showLoadingScreen();
 
-        addChatMessage(question, true);
+      // Clear input field
+      document.getElementById('userInput').value = '';
 
-        try {
-          const response = await fetch('/chat_response/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-            },
-            body: JSON.stringify({ user_query: question }),
-          });
+      try {
+        const response = await fetch('/chat_response/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+          body: JSON.stringify({ user_query: userInput }),
+        });
 
-          const data = await response.json();
+        const data = await response.json();
 
-          if (data.response) {
-            addChatMessage(data.response, false);
-          } else {
-            addChatMessage('Sorry, I did not understand that.', false);
-          }
-        } catch (error) {
-          console.error('Error fetching chatbot response:', error);
-          addChatMessage('An error occurred. Please try again.', false);
+        if (data.response) {
+          addChatMessage(data.response, false);
+        } else {
+          addChatMessage('Sorry, I did not understand that.', false);
         }
+      } catch (error) {
+        console.error('Error fetching chatbot response:', error);
+        addChatMessage('An error occurred. Please try again.', false);
+      } finally {
+        // Hide loading screen after the request is completed
+        hideLoadingScreen();
+      }
+    });
+
+    // Handle Question Links
+    document.addEventListener("DOMContentLoaded", () => {
+      const exampleLinks = document.querySelectorAll(".example-link");
+
+      exampleLinks.forEach(link => {
+        link.addEventListener("click", async (event) => {
+          event.preventDefault();
+
+          const question = link.getAttribute("data-question");
+          if (!question) return;
+
+          // Show loading screen and append user message
+          showLoadingScreen();
+          addChatMessage(question, true);
+
+          try {
+            const response = await fetch('/chat_response/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+              },
+              body: JSON.stringify({ user_query: question }),
+            });
+
+            const data = await response.json();
+
+            if (data.response) {
+              addChatMessage(data.response, false);
+            } else {
+              addChatMessage('Sorry, I did not understand that.', false);
+            }
+          } catch (error) {
+            console.error('Error fetching chatbot response:', error);
+            addChatMessage('An error occurred. Please try again.', false);
+          } finally {
+            hideLoadingScreen();
+          }
+        });
       });
     });
-  });
-
-
-  // Handle form submission for chat
-  chatForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const userInput = document.getElementById('userInput');
-    const userMessage = userInput.value.trim();
-
-    if (userMessage === '') return; // Prevent empty messages
-
-    // Append user message
-    addChatMessage(userMessage, true);
-
-    // Clear input field
-    userInput.value = '';
-
-    // Send user input to the server
-    try {
-      const response = await fetch('/chat_response/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-        },
-        body: JSON.stringify({ user_query: userMessage }),
-      });
-
-      const data = await response.json();
-
-      // Append chatbot response
-      if (data.response) {
-        addChatMessage(data.response, false);
-      } else {
-        addChatMessage('Sorry, I did not understand that.', false);
-      }
-    } catch (error) {
-      console.error('Error fetching chatbot response:', error);
-      addChatMessage('An error occurred. Please try again.', false);
-    }
-  });
-</script>
+  </script>
 </body>
 </html>
