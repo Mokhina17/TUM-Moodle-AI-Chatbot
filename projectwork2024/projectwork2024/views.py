@@ -5,6 +5,7 @@ from .DocStore import DocStore
 from .Integration import Model
 import json
 
+
 # Initialize DocStore and Model
 doc_store = DocStore()
 model = Model()
@@ -44,3 +45,10 @@ def chat_response(request):
         except Exception as e:
             return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def start_new_chat(request):
+    if request.method == 'POST':
+        # Logic to start a new chat (e.g., clear session or reset chat state)
+        request.session['chat_history'] = []  # Example: clear chat history
+        return JsonResponse({'message': 'New chat started successfully.'})
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)

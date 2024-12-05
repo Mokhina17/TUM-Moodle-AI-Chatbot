@@ -9,8 +9,6 @@
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
@@ -18,20 +16,21 @@
     <!-- Slide bar -->
     <div id="slideBar" class="slide-bar">
       <div class="chat-history">
-        <div class="chat-item">
+        <!-- Dynamic Previous Chats -->
+        <div class="chat-item" onclick="loadChat(1)">
           <div class="chat-title">Previous Chat 1</div>
           <div class="chat-question">What are the exam requirements?</div>
         </div>
-        <div class="chat-item">
+        <div class="chat-item" onclick="loadChat(2)">
           <div class="chat-title">Previous Chat 2</div>
           <div class="chat-question">How many weekly hours?</div>
         </div>
-        <div class="chat-item">
+        <div class="chat-item" onclick="loadChat(3)">
           <div class="chat-title">Previous Chat 3</div>
           <div class="chat-question">What are the resources?</div>
         </div>
       </div>
-      <button class="new-chat-btn">New Chat</button>
+      <button class="new-chat-btn" onclick="startNewChat()">New Chat</button>
     </div>
 
     <!-- Menu button -->
@@ -59,7 +58,7 @@
       </div>
 
       <!-- Three columns -->
-      <div class="info-cards">
+      <div id="infoCards" class="info-cards">
         <!-- Examples -->
         <div class="column">
           <div class="card">
@@ -121,6 +120,11 @@
         </div>
       </div>
 
+      <!-- Chat container -->
+      <div id="chatContainer" class="chat-container">
+        <!-- Chat messages will be dynamically added here -->
+      </div>
+
       <!-- Footer with search bar -->
       <footer class="footer">
         <form id="chatForm" class="chat-form">
@@ -179,16 +183,31 @@
     const menuBtn = document.getElementById('menuBtn');
     const slideBar = document.getElementById('slideBar');
     const mainContent = document.querySelector('.main-content');
-    const chatForm = document.querySelector('.chat-form');
+    const infoCards = document.getElementById('infoCards');
     const chatContainer = document.getElementById('chatContainer');
+    const chatForm = document.querySelector('.chat-form');
     const loadingMessage = document.getElementById('loadingMessage');
 
+    // Slide bar toggle
     menuBtn.addEventListener('click', () => {
       slideBar.classList.toggle('active');
       mainContent.classList.toggle('shifted');
       chatForm.classList.toggle('shifted');
     });
 
+    // Start a new chat
+    function startNewChat() {
+      chatContainer.innerHTML = '';
+      if (infoCards) infoCards.style.display = 'flex';
+      document.getElementById('userInput').value = '';
+    }
+
+    // Load previous chats
+    function loadChat(chatId) {
+      alert(`Loading chat ${chatId}...`);
+    }
+
+    // Submit chat form
     // Function to append messages dynamically
     function addChatMessage(message, isUser = false) {
       const messageDiv = document.createElement('div');
@@ -210,17 +229,19 @@
       event.preventDefault();
 
       const userInput = document.getElementById('userInput').value.trim();
+      if (!userInput) return;
+      chatContainer.innerHTML += `
+        <div class="chat-message user-message">
+          <div class="message-content">${userInput}</div>
+        </div>
+      `;
 
-      if (userInput === '') return; // Prevent empty messages
-
-      // Append user message and show loading screen
-      addChatMessage(userInput, true);
-      showLoadingScreen();
-
-      // Clear input field
       document.getElementById('userInput').value = '';
+      if (infoCards) infoCards.style.display = 'none';
+      chatContainer.scrollTop = chatContainer.scrollHeight;
 
       try {
+        showLoadingScreen();
         const response = await fetch('/chat_response/', {
           method: 'POST',
           headers: {
@@ -230,24 +251,28 @@
           body: JSON.stringify({ user_query: userInput }),
         });
 
-        const data = await response.json();
+        const data = await response.json()
+        chatContainer.innerHTML += `
+          <div class="chat-message bot-message">
+            <div class="message-content">${data.response}</div>
+          </div>
+        `;
 
-        if (data.response) {
-          addChatMessage(data.response, false);
-        } else {
-          addChatMessage('Sorry, I did not understand that.', false);
-        }
-      } catch (error) {
-        console.error('Error fetching chatbot response:', error);
-        addChatMessage('An error occurred. Please try again.', false);
-      } finally {
-        // Hide loading screen after the request is completed
         hideLoadingScreen();
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      } catch (error) {
+        console.error('Error:', error);
+        chatContainer.innerHTML += `
+          <div class="chat-message error-message">
+            <div class="message-content">Error: Unable to connect to the server. Please try again later.</div>
+          </div>
+        `;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
       }
     });
 
-    // Handle Question Links
-    document.addEventListener("DOMContentLoaded", () => {
+     // Handle Question Links
+     document.addEventListener("DOMContentLoaded", () => {
       const exampleLinks = document.querySelectorAll(".example-link");
 
       exampleLinks.forEach(link => {
@@ -287,6 +312,7 @@
         });
       });
     });
+
   </script>
 </body>
 </html>
