@@ -67,17 +67,23 @@
             </div>
             <div class="card-title">Examples</div>
             <div class="content-block">
-              <a href="{% url 'chat' %}?question=exam_requirements">What are the exam requirements for the course? →</a>
+              <a href="#" class="start-chat" data-question="What are the exam requirements for the course?">
+                What are the exam requirements for the course? →
+              </a>
             </div>
           </div>
           <div class="card">
             <div class="content-block">
-              <a href="{% url 'chat' %}?question=weekly_hours">How many weekly hours do I need to commit for this module? →</a>
+              <a href="#" class="start-chat" data-question="How many weekly hours do I need to commit for this module?">
+                How many weekly hours do I need to commit for this module? →
+              </a>
             </div>
           </div>
           <div class="card">
             <div class="content-block">
-              <a href="{% url 'chat' %}?question=resources">What are the recommended books or resources for this course? →</a>
+              <a href="#" class="start-chat" data-question="What are the recommended books or resources for this course?">
+                What are the recommended books or resources for this course? →
+              </a>
             </div>
           </div>
         </div>
@@ -147,6 +153,55 @@
       mainContent.classList.toggle('shifted');
       chatForm.classList.toggle('shifted');
     });
+
+    //new chat Examples
+    document.querySelectorAll('.start-chat').forEach(item => {
+    item.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const question = event.target.getAttribute('data-question');
+        document.querySelector('.info-cards').style.display = 'none';
+        document.querySelector('#slideBar').classList.remove('active');
+        document.querySelector('.main-content').classList.remove('shifted');
+        document.querySelector('.chat-form').classList.remove('shifted');
+        const chatContainer = document.querySelector('.chat-container');
+        chatContainer.innerHTML = '';
+        chatContainer.innerHTML += `
+          <div class="chat-message user-message">
+            <div class="message-content">${question}</div>
+          </div>
+        `;
+
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        fetch('/chat_response/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({ user_query: question })
+        })
+        .then(response => response.json())
+        .then(data => {
+            chatContainer.innerHTML += `
+              <div class="chat-message bot-message">
+                <div class="message-content">${data.response}</div>
+              </div>
+            `;
+
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            chatContainer.innerHTML += `
+              <div class="chat-message error-message">
+                <div class="message-content">Error: Unable to connect to the server. Please try again later.</div>
+              </div>
+            `;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        });
+    });
+});
 
     // Start a new chat
     function startNewChat() {
