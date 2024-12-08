@@ -134,6 +134,9 @@
 
   <!-- JavaScript -->
   <script>
+    document.addEventListener('DOMContentLoaded', loadChatHistory);
+
+// Slide bar toggle
     const menuBtn = document.getElementById('menuBtn');
     const slideBar = document.getElementById('slideBar');
     const mainContent = document.querySelector('.main-content');
@@ -141,23 +144,61 @@
     const chatContainer = document.getElementById('chatContainer');
     const chatForm = document.querySelector('.chat-form');
 
-    // Slide bar toggle
     menuBtn.addEventListener('click', () => {
       slideBar.classList.toggle('active');
       mainContent.classList.toggle('shifted');
-      chatForm.classList.toggle('shifted');
     });
+
+    // Load chat history on page load
+    function loadChatHistory() {
+      fetch('/chat/history/')
+        .then(response => response.json())
+        .then(data => {
+          chatContainer.innerHTML = ''; // Clear previous messages
+          data.history.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = msg.sender === 'user' ? 'chat-message user-message' : 'chat-message bot-message';
+            messageDiv.innerHTML = `<div class="message-content">${msg.message}</div>`;
+            chatContainer.appendChild(messageDiv);
+          });
+        })
+        .catch(error => console.error('Error loading history:', error));
+    }
+
+    // Load a specific chat by ID
+    function loadChat(chatId) {
+      fetch(`/chat/load/${chatId}/`)
+        .then(response => response.json())
+        .then(data => {
+          chatContainer.innerHTML = ''; // Clear previous messages
+          data.messages.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = msg.sender === 'user' ? 'chat-message user-message' : 'chat-message bot-message';
+            messageDiv.innerHTML = `<div class="message-content">${msg.message}</div>`;
+            chatContainer.appendChild(messageDiv);
+          });
+        })
+        .catch(error => {
+          console.error(`Error loading chat ${chatId}:`, error);
+          alert('Failed to load the chat. Please try again.');
+        });
+    }
 
     // Start a new chat
     function startNewChat() {
-      chatContainer.innerHTML = '';
-      if (infoCards) infoCards.style.display = 'flex';
-      document.getElementById('userInput').value = '';
-    }
-
-    // Load previous chats
-    function loadChat(chatId) {
-      alert(`Loading chat ${chatId}...`);
+      fetch('/start_new_chat/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          chatContainer.innerHTML = ''; // Clear chat messages
+          document.getElementById('userInput').value = ''; // Clear input field
+          if (infoCards) infoCards.style.display = 'flex'; // Show info cards again
+        })
+        .catch(error => console.error('Error starting new chat:', error));
     }
 
     // Submit chat form
@@ -166,11 +207,11 @@
 
       const userInput = document.getElementById('userInput').value.trim();
       if (!userInput) return;
-      chatContainer.innerHTML += `
+      chatContainer.innerHTML +=
         <div class="chat-message user-message">
           <div class="message-content">${userInput}</div>
         </div>
-      `;
+      ;
 
       document.getElementById('userInput').value = '';
       if (infoCards) infoCards.style.display = 'none';
@@ -187,24 +228,26 @@
         });
 
         const data = await response.json()
-        chatContainer.innerHTML += `
+        chatContainer.innerHTML +=
           <div class="chat-message bot-message">
             <div class="message-content">${data.response}</div>
           </div>
-        `;
+        ;
 
 
         chatContainer.scrollTop = chatContainer.scrollHeight;
       } catch (error) {
         console.error('Error:', error);
-        chatContainer.innerHTML += `
+        chatContainer.innerHTML +=
           <div class="chat-message error-message">
             <div class="message-content">Error: Unable to connect to the server. Please try again later.</div>
           </div>
-        `;
+        ;
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
     });
+
+
   </script>
 </body>
 </html>
