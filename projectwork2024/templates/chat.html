@@ -263,11 +263,11 @@
 
       const userInput = document.getElementById('userInput').value.trim();
       if (!userInput) return;
-      chatContainer.innerHTML +=
+      chatContainer.innerHTML +=`
         <div class="chat-message user-message">
           <div class="message-content">${userInput}</div>
         </div>
-      ;
+      `;
 
       document.getElementById('userInput').value = '';
       if (infoCards) infoCards.style.display = 'none';
@@ -284,21 +284,21 @@
         });
 
         const data = await response.json()
-        chatContainer.innerHTML +=
+        chatContainer.innerHTML +=`
           <div class="chat-message bot-message">
             <div class="message-content">${data.response}</div>
           </div>
-        ;
+        `;
 
 
         chatContainer.scrollTop = chatContainer.scrollHeight;
       } catch (error) {
         console.error('Error:', error);
-        chatContainer.innerHTML +=
+        chatContainer.innerHTML +=`
           <div class="chat-message error-message">
             <div class="message-content">Error: Unable to connect to the server. Please try again later.</div>
           </div>
-        ;
+        `;
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
     });
