@@ -1,0 +1,309 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta and title -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TUM Moodle GPT</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  <div class="container">
+    <!-- Slide bar -->
+    <div id="slideBar" class="slide-bar">
+      <div class="chat-history">
+        <!-- Dynamic Previous Chats -->
+        <div class="chat-item" onclick="loadChat(1)">
+          <div class="chat-title">Previous Chat 1</div>
+          <div class="chat-question">What are the exam requirements?</div>
+        </div>
+        <div class="chat-item" onclick="loadChat(2)">
+          <div class="chat-title">Previous Chat 2</div>
+          <div class="chat-question">How many weekly hours?</div>
+        </div>
+        <div class="chat-item" onclick="loadChat(3)">
+          <div class="chat-title">Previous Chat 3</div>
+          <div class="chat-question">What are the resources?</div>
+        </div>
+      </div>
+      <button class="new-chat-btn" onclick="startNewChat()">New Chat</button>
+    </div>
+
+    <!-- Menu button -->
+    <div id="menuBtn" class="menu-btn">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <h2 class="platform-title">Lernplatform Moodle<br>Technische Universität München</h2>
+        </div>
+        <div class="header-right">
+          <img src="{% static 'images/tum_logo.svg' %}" alt="TUM Logo" class="tum-logo">
+        </div>
+      </header>
+
+      <!-- Main title -->
+      <div class="main-title">
+        <h1>TUM Moodle GPT</h1>
+      </div>
+
+      <!-- Three columns -->
+      <div id="infoCards" class="info-cards">
+        <!-- Examples -->
+        <div class="column">
+          <div class="card">
+            <div class="icon-container">
+              <img src="{% static 'images/clean.png' %}" alt="Examples Icon" class="icon">
+            </div>
+            <div class="card-title">Examples</div>
+            <div class="content-block">
+              <a href="#" class="start-chat" data-question="What are the exam requirements for the course?">
+                What are the exam requirements for the course? →
+              </a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="content-block">
+              <a href="#" class="start-chat" data-question="How many weekly hours do I need to commit for this module?">
+                How many weekly hours do I need to commit for this module? →
+              </a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="content-block">
+              <a href="#" class="start-chat" data-question="What are the recommended books or resources for this course?">
+                What are the recommended books or resources for this course? →
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capabilities -->
+        <div class="column">
+          <div class="card">
+            <div class="icon-container">
+              <img src="{% static 'images/star-2.png' %}" alt="Capabilities Icon" class="icon">
+            </div>
+            <div class="card-title">Capabilities</div>
+            <div class="content-block">Remembers what user said earlier in the conversation.</div>
+          </div>
+          <div class="card">
+            <div class="content-block">Understands and answers questions about courses, schedules, and Moodle-related topics.</div>
+          </div>
+          <div class="card">
+            <div class="content-block">Rejects irrelevant or inappropriate queries to maintain a productive discussion.</div>
+          </div>
+        </div>
+
+        <!-- Limitations  -->
+        <div class="column">
+          <div class="card">
+            <div class="icon-container">
+              <img src="{% static 'images/warning.png' %}" alt="Limitations Icon" class="icon">
+            </div>
+            <div class="card-title">Limitations</div>
+            <div class="content-block">May occasionally generate incorrect information.</div>
+          </div>
+          <div class="card">
+            <div class="content-block">Cannot address issues or updates outside the Moodle platform or TUM-related systems.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat container -->
+      <div id="chatContainer" class="chat-container">
+        <!-- Chat messages will be dynamically added here -->
+      </div>
+
+      <!-- Footer with search bar -->
+      <footer class="footer">
+        <form id="chatForm" class="chat-form">
+          {% csrf_token %}
+          <input type="text" id="userInput" class="chat-input" placeholder="Send a message...">
+          <button type="submit" class="chat-submit">
+            <img src="{% static 'images/2582606.png' %}" alt="Send" class="send-icon">
+          </button>
+        </form>
+      </footer>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', loadChatHistory);
+
+// Slide bar toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const slideBar = document.getElementById('slideBar');
+    const mainContent = document.querySelector('.main-content');
+    const infoCards = document.getElementById('infoCards');
+    const chatContainer = document.getElementById('chatContainer');
+    const chatForm = document.querySelector('.chat-form');
+
+    menuBtn.addEventListener('click', () => {
+      slideBar.classList.toggle('active');
+      mainContent.classList.toggle('shifted');
+      chatForm.classList.toggle('shifted');
+    });
+
+    //new chat Examples
+    document.querySelectorAll('.start-chat').forEach(item => {
+    item.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const question = event.target.getAttribute('data-question');
+        document.querySelector('.info-cards').style.display = 'none';
+        document.querySelector('#slideBar').classList.remove('active');
+        document.querySelector('.main-content').classList.remove('shifted');
+        document.querySelector('.chat-form').classList.remove('shifted');
+        const chatContainer = document.querySelector('.chat-container');
+        chatContainer.innerHTML = '';
+        chatContainer.innerHTML += `
+          <div class="chat-message user-message">
+            <div class="message-content">${question}</div>
+          </div>
+        `;
+
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        fetch('/chat_response/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({ user_query: question })
+        })
+        .then(response => response.json())
+        .then(data => {
+            chatContainer.innerHTML += `
+              <div class="chat-message bot-message">
+                <div class="message-content">${data.response}</div>
+              </div>
+            `;
+
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            chatContainer.innerHTML += `
+              <div class="chat-message error-message">
+                <div class="message-content">Error: Unable to connect to the server. Please try again later.</div>
+              </div>
+            `;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        });
+    });
+});
+
+    // Load chat history on page load
+    function loadChatHistory() {
+      fetch('/chat/history/')
+        .then(response => response.json())
+        .then(data => {
+          chatContainer.innerHTML = ''; // Clear previous messages
+          data.history.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = msg.sender === 'user' ? 'chat-message user-message' : 'chat-message bot-message';
+            messageDiv.innerHTML = `<div class="message-content">${msg.message}</div>`;
+            chatContainer.appendChild(messageDiv);
+          });
+        })
+        .catch(error => console.error('Error loading history:', error));
+    }
+
+    // Load a specific chat by ID
+    function loadChat(chatId) {
+      fetch(`/chat/load/${chatId}/`)
+        .then(response => response.json())
+        .then(data => {
+          chatContainer.innerHTML = ''; // Clear previous messages
+          data.messages.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = msg.sender === 'user' ? 'chat-message user-message' : 'chat-message bot-message';
+            messageDiv.innerHTML = `<div class="message-content">${msg.message}</div>`;
+            chatContainer.appendChild(messageDiv);
+          });
+        })
+        .catch(error => {
+          console.error(`Error loading chat ${chatId}:`, error);
+          alert('Failed to load the chat. Please try again.');
+        });
+    }
+
+    // Start a new chat
+    function startNewChat() {
+      fetch('/start_new_chat/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          chatContainer.innerHTML = ''; // Clear chat messages
+          document.getElementById('userInput').value = ''; // Clear input field
+          if (infoCards) infoCards.style.display = 'flex'; // Show info cards again
+        })
+        .catch(error => console.error('Error starting new chat:', error));
+    }
+
+    // Submit chat form
+    chatForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const userInput = document.getElementById('userInput').value.trim();
+      if (!userInput) return;
+      chatContainer.innerHTML +=`
+        <div class="chat-message user-message">
+          <div class="message-content">${userInput}</div>
+        </div>
+      `;
+
+      document.getElementById('userInput').value = '';
+      if (infoCards) infoCards.style.display = 'none';
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      try {
+        const response = await fetch('/chat_response/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+          },
+          body: JSON.stringify({ user_query: userInput }),
+        });
+
+        const data = await response.json()
+        chatContainer.innerHTML +=`
+          <div class="chat-message bot-message">
+            <div class="message-content">${data.response}</div>
+          </div>
+        `;
+
+
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      } catch (error) {
+        console.error('Error:', error);
+        chatContainer.innerHTML +=`
+          <div class="chat-message error-message">
+            <div class="message-content">Error: Unable to connect to the server. Please try again later.</div>
+          </div>
+        `;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    });
+
+
+  </script>
+</body>
+</html>
