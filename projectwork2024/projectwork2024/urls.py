@@ -16,12 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from projectwork2024 import views
-from .views import start_new_chat
+from projectwork2024.views import chat_interface, chat_response, load_chat, start_new_chat
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.chat_interface, name='home'),  # Default route
-    path('chat_response/', views.chat_response, name='chat_response'),
-    path('chat/load/<int:chat_id>/', views.load_chat, name='load_chat'),
+    path('', chat_interface, name='home'),  # Default route
+    path('chat_response/', chat_response, name='chat_response'),
+    path('chat/load/<int:chat_id>/', load_chat, name='load_chat'),
     path('start_new_chat/', start_new_chat, name='start_new_chat'),
 ]
