@@ -21,9 +21,7 @@ from .views import start_new_chat
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.chat_interface, name='home'),  # Default route
-    path('chat/', views.chat_interface, name='chat'),
     path('chat_response/', views.chat_response, name='chat_response'),
     path('chat/load/<int:chat_id>/', views.load_chat, name='load_chat'),
     path('start_new_chat/', start_new_chat, name='start_new_chat'),
-    path('chat/history/', views.get_chat_history, name='chat_history'),
 ]

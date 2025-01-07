@@ -70,28 +70,6 @@ def start_new_chat(request):
         return JsonResponse({'message': 'New chat started successfully.'})
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
-
-def get_chat_history(request):
-    """Fetch chat history for the current user or session."""
-    if request.method == 'GET':
-        session_id = request.session.session_key
-        if not session_id:
-            return JsonResponse({'error': 'Session ID not found.'}, status=400)
-
-        # Fetch conversations for the user or session
-        conversations = Conversation.objects.filter(
-            user=request.user if request.user.is_authenticated else None,
-            session_id=session_id
-        ).order_by('timestamp')
-
-        # Build response data
-        history = [
-            {'sender': convo.sender, 'message': convo.message, 'timestamp': convo.timestamp}
-            for convo in conversations
-        ]
-        return JsonResponse({'history': history})
-    return JsonResponse({'error': 'Invalid request method.'}, status=400)
-
 def load_chat(request, chat_id):
     """Load a specific chat by its ID."""
     try:
