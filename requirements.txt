@@ -11,3 +11,4 @@ PyPDF2
 accelerate
 PyMuPDF
 huggingface_hub
+pytest
