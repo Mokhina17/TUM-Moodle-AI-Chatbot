@@ -30,7 +30,7 @@ def chat_response(request):
                 return JsonResponse({'error': 'User query is empty.'}, status=400)
 
             # Retrieve relevant documents
-            relevant_docs = doc_store.search(user_query, k=1)
+            relevant_docs = doc_store.search(user_query, k=10)
 
             # Generate response using the model
             response = model.generate_response(user_query, relevant_docs)
@@ -60,6 +60,7 @@ def chat_response(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON format.'}, status=400)
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
 
 
 def start_new_chat(request):

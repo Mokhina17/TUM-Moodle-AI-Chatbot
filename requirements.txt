@@ -9,3 +9,5 @@ sentence-transformers
 faiss-cpu
 PyPDF2
 accelerate
+PyMuPDF
+huggingface_hub

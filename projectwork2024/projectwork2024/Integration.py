@@ -1,28 +1,49 @@
-from transformers import pipeline
+from huggingface_hub import InferenceClient
+import string
 
 class Model:
     def __init__(self):
-        self.model = pipeline(model="Intel/dynamic_tinybert")
+        self.client = InferenceClient(api_key="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") 
 
+    def clean_text(self, text):
+        # Remove non-printable ASCII characters except for newlines and spaces
+        printable = set(string.printable)
+        cleaned_text = ''.join([char if char in printable or char == '\n' else ' ' for char in text])
+        # Replace multiple spaces with a single space
+        cleaned_text = ' '.join(cleaned_text.split())
+        return cleaned_text
+    
     def generate_response(self, prompt, relevant_docs):
-        if self.model is None:
-            return "Sorry, I am unable to generate a response at the moment."
-        
-        # Combine the user's query with the relevant documents
-        context = "\n".join([doc for doc, _ in relevant_docs])
-        
-        # Format the input correctly for the question-answering pipeline
-        input_data = {
-            "question": prompt,
-            "context": context
-        }
-        
-        response = self.model(input_data)
-        return response['answer']
+        try:
+            # Select and combine all relevant chunks
+            top_chunks = [doc for doc, _ in relevant_docs]
+            context = " ".join(top_chunks)
 
-# Example usage
-if __name__ == "__main__":
-    model = Model()
-    relevant_docs = [("Relevant document 1", 0.1), ("Relevant document 2", 0.2)]
-    response = model.generate_response("Hello, how are you?", relevant_docs)
-    print(response)
+            # Clean the context text
+            cleaned_context = self.clean_text(context)
+            print(f"Cleaned context: {cleaned_context}")
+
+            # Prepare messages for the chat API
+            messages = [
+                {
+                    "role": "system",
+                    "content": "You are TUM GPT a helpful assistant that provides answers based on the provided context."
+                },
+                {
+                    "role": "user",
+                    "content": f"Context: {cleaned_context}\nQuestion: {prompt}"
+                }
+            ]
+
+            # Send request to the Llama-3.1 model
+            completion = self.client.chat.completions.create(
+                model="microsoft/Phi-3.5-mini-instruct",
+                messages=messages,
+                max_tokens=1024
+            )
+
+            # Extract and return the assistant's response
+            response = completion.choices[0].message.content.strip()
+            return response
+        except Exception as e:
+            return f"Error generating response: {str(e)}"
