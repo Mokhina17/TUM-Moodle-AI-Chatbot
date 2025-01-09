@@ -27,7 +27,7 @@ class Model:
             messages = [
                 {
                     "role": "system",
-                    "content": "You are TUM GPT a helpful assistant that provides answers based on the provided context."
+                    "content": "You are TUM GPT a helpful assistant that provides answers based on the provided context. You will provide answers to questions based on the given context. Your responses shall be structured in a manner that makes you easier to understand. Provide answers in Bullet points if you must and stylize or embolden important text."
                 },
                 {
                     "role": "user",

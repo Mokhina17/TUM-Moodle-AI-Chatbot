@@ -10,6 +10,7 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -67,22 +68,22 @@
             </div>
             <div class="card-title">Examples</div>
             <div class="content-block">
-              <a href="#" class="start-chat" data-question="What are the exam requirements for the course?">
-                What are the exam requirements for the course? →
+              <a href="#" class="start-chat" data-question="Can you tell me more about TUM?">
+                Can you tell me more about TUM? →
               </a>
             </div>
           </div>
           <div class="card">
             <div class="content-block">
-              <a href="#" class="start-chat" data-question="How many weekly hours do I need to commit for this module?">
-                How many weekly hours do I need to commit for this module? →
+              <a href="#" class="start-chat" data-question="How many weekly hours do I need to commit for the Machine Learning and Data Science Course?">
+                How many weekly hours do I need to commit for the Machine Learning and Data Science Course? →
               </a>
             </div>
           </div>
           <div class="card">
             <div class="content-block">
-              <a href="#" class="start-chat" data-question="What are the recommended books or resources for this course?">
-                What are the recommended books or resources for this course? →
+              <a href="#" class="start-chat" data-question="What are the recommended books or resources for the Digital Analysis of Digital Control Systems course?">
+                What are the recommended books or resources for the Digital Analysis of Digital Control Systems course? →
               </a>
             </div>
           </div>
@@ -140,6 +141,11 @@
 
   <!-- JavaScript -->
   <script>
+    marked.setOptions({
+      breaks: true,
+      sanitize: true
+    });
+
     // Slide bar toggle
     const menuBtn = document.getElementById('menuBtn');
     const slideBar = document.getElementById('slideBar');
@@ -156,7 +162,7 @@
 
     //new chat Examples
     document.querySelectorAll('.start-chat').forEach(item => {
-    item.addEventListener('click', (event) => {
+      item.addEventListener('click', (event) => {
         event.preventDefault();
 
         const question = event.target.getAttribute('data-question');
@@ -174,34 +180,34 @@
 
         chatContainer.scrollTop = chatContainer.scrollHeight;
         fetch('/chat_response/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: JSON.stringify({ user_query: question })
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          },
+          body: JSON.stringify({ user_query: question })
         })
         .then(response => response.json())
         .then(data => {
-            chatContainer.innerHTML += `
-              <div class="chat-message bot-message">
-                <div class="message-content">${data.response}</div>
-              </div>
-            `;
+          chatContainer.innerHTML += `
+            <div class="chat-message bot-message">
+              <div class="message-content">${marked.parse(data.response)}</div>
+            </div>
+          `;
 
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+          chatContainer.scrollTop = chatContainer.scrollHeight;
         })
         .catch(error => {
-            console.error('Error:', error);
-            chatContainer.innerHTML += `
-              <div class="chat-message error-message">
-                <div class="message-content">Error: Unable to connect to the server. Please try again later.</div>
-              </div>
-            `;
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+          console.error('Error:', error);
+          chatContainer.innerHTML += `
+            <div class="chat-message error-message">
+              <div class="message-content">Error: Unable to connect to the server. Please try again later.</div>
+            </div>
+          `;
+          chatContainer.scrollTop = chatContainer.scrollHeight;
         });
+      });
     });
-});
 
     // Load a specific chat by ID
     function loadChat(chatId) {
@@ -212,7 +218,9 @@
           data.messages.forEach(msg => {
             const messageDiv = document.createElement('div');
             messageDiv.className = msg.sender === 'user' ? 'chat-message user-message' : 'chat-message bot-message';
-            messageDiv.innerHTML = `<div class="message-content">${msg.message}</div>`;
+            messageDiv.innerHTML = `<div class="message-content">${
+              msg.sender === 'user' ? msg.message : marked.parse(msg.message)
+            }</div>`;
             chatContainer.appendChild(messageDiv);
           });
         })
@@ -221,6 +229,7 @@
           alert('Failed to load the chat. Please try again.');
         });
     }
+
 
     // Start a new chat
     function startNewChat() {
@@ -268,7 +277,7 @@
         const data = await response.json()
         chatContainer.innerHTML += `
           <div class="chat-message bot-message">
-            <div class="message-content">${data.response}</div>
+            <div class="message-content">${marked.parse(data.response)}</div>
           </div>
         `;
 
@@ -283,6 +292,7 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
     });
+
   </script>
 </body>
 </html>

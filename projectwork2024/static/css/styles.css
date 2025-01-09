@@ -360,3 +360,49 @@ header {
 .info-cards.hidden {
   display: none;
 }
+
+
+/* Markdown styles */
+.bot-message .message-content h1,
+.bot-message .message-content h2,
+.bot-message .message-content h3,
+.bot-message .message-content h4,
+.bot-message .message-content h5,
+.bot-message .message-content h6 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+.bot-message .message-content p {
+    margin-bottom: 1em;
+}
+
+.bot-message .message-content ul,
+.bot-message .message-content ol {
+    margin-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+.bot-message .message-content code {
+    background-color: #f3f4f6;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+.bot-message .message-content pre {
+    background-color: #f3f4f6;
+    padding: 1em;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin-bottom: 1em;
+}
+
+.bot-message .message-content blockquote {
+    border-left: 4px solid #e5e7eb;
+    padding-left: 1em;
+    margin-left: 0;
+    margin-bottom: 1em;
+    color: #6b7280;
+}
